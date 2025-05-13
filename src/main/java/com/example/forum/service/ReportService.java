@@ -19,6 +19,7 @@ public class ReportService {
      */
     public List<ReportForm> findAllReport() {
 //        findAllで実行されている処理はSQL文の「select * from report;」のようなもの
+        //ennity型
         List<Report> results = reportRepository.findAll();
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
@@ -29,6 +30,8 @@ public class ReportService {
      * DBから取得したデータをFormに設定
      */
     private List<ReportForm> setReportForm(List<Report> results) {
+//        ビューに返すためにはフォームに移し返さないといけない
+//        コントローラーは全部フォームで流してる？？
         List<ReportForm> reports = new ArrayList<>();
 
         for (int i = 0; i < results.size(); i++) {
@@ -59,6 +62,7 @@ public class ReportService {
         report.setContent(reqReport.getContent());
         return report;
     }
+
 
 }
 

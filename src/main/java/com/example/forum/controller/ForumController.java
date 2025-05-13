@@ -5,13 +5,15 @@ import com.example.forum.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
 public class ForumController {
-    @Autowired
+    @Autowired //newしなくてもいい
     ReportService reportService;
 
     /*
@@ -20,7 +22,7 @@ public class ForumController {
     @GetMapping
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
-        // 投稿を全件取得
+        // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
         List<ReportForm> contentData = reportService.findAllReport();
         // 画面遷移先を指定 「現在のURL」/top へ画面遷移することを指定します。
         mav.setViewName("/top");
@@ -44,6 +46,17 @@ public class ForumController {
         // 準備した空のFormを保管
         mav.addObject("formModel", reportForm);
         return mav;
+    }
+
+    /*
+     * 新規投稿処理
+     */
+    @PostMapping("/add")
+    public ModelAndView addContent(@ModelAttribute("formModel") ReportForm reportForm){
+        // 投稿をテーブルに格納
+        reportService.saveReport(reportForm);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
     }
 }
 
