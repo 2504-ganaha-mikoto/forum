@@ -62,6 +62,18 @@ public class ReportService {
     }
 
     /*
+     * レコード1件取得
+     */
+    public ReportForm editReport(Integer id) {
+        List<Report> results = new ArrayList<>();
+        //reportRepository.findById(id) : Id が一致するレコードを取得する
+        //Id が合致しないときは null を返したいので、.orElse(null)
+//        return reportRepository.findById(id).orElseThrow(() -> new NotFoundException("不正なパラメーターです"));
+        results.add((Report) reportRepository.findById(id).orElse(null));
+        List<ReportForm> reports = setReportForm(results);
+        return reports.get(0);
+    }
+    /*
      * リクエストから取得した情報をEntityに設定
      */
     private Report setReportEntity(ReportForm reqReport) {
