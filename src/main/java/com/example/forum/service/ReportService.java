@@ -20,7 +20,7 @@ public class ReportService {
     public List<ReportForm> findAllReport() {
 //        findAllで実行されている処理はSQL文の「select * from report;」のようなもの
         //ennity型
-        List<Report> results = reportRepository.findAll();
+        List<Report> results = reportRepository.findAllByOrderByIdDesc();
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
         List<ReportForm> reports = setReportForm(results);
@@ -50,6 +50,14 @@ public class ReportService {
         Report saveReport = setReportEntity(reqReport);
         //saveメソッドはテーブルに新規投稿をinsert・updateするような処理
         reportRepository.save(saveReport);
+        //戻り値はなし
+    }
+
+    /*
+     * レコード削除
+     */
+    public void deleteReport(Integer id) {
+        reportRepository.deleteById(id);
         //戻り値はなし
     }
 
