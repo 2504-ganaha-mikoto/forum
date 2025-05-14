@@ -1,6 +1,8 @@
 package com.example.forum.controller;
 
+import com.example.forum.controller.form.CommentForm;
 import com.example.forum.controller.form.ReportForm;
+import com.example.forum.service.CommentService;
 import com.example.forum.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,9 @@ public class ForumController {
     @Autowired //newしなくてもいい
     ReportService reportService;
 
+    @Autowired
+    CommentService commentService;
+
     /*
      * 投稿内容表示処理
      */
@@ -22,11 +27,16 @@ public class ForumController {
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
         List<ReportForm> contentData = reportService.findAllReport();
+        List<CommentForm> commentData = commentService.findAllComment();
+
         // 画面遷移先を指定 「現在のURL」/top へ画面遷移することを指定します。
         mav.setViewName("/top");
         // 投稿データオブジェクトを先ほどのcontentDataをModelAndView型の変数mavへ格納します。
         // 保管各値がReportForm型のリストである「contentData」へ格納されます。
         mav.addObject("contents", contentData);
+        mav.addObject("comments", commentData);
+        mav.addObject("commentform", new CommentForm());
+
         /* 変数mavを戻り値として返します。 */
         return mav;
     }
@@ -102,6 +112,19 @@ public class ForumController {
         reportService.saveReport(report);
         // rootへリダイレクト
         return new ModelAndView("redirect:/");
+    }
+    /*
+     *コメント投稿
+     */
+    @PostMapping("/comment/{id}")
+    public ModelAndView addContent(@ModelAttribute("commentform") CommentForm commentForm){
+        // 返信をテーブルに格納
+        commentService.saveComment(commentForm);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
+//        どうして新しく作って送りなおしているのか
+//        return "redirect:/";
+
     }
 }
 

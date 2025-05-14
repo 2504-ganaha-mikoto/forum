@@ -20,13 +20,32 @@
         <div class="text">
             投稿 : <span th:text="${content.content}"/>
         </div>
+        <div class="comment-contents">
+            <form method="post" th:action="@{/comment/{id}(id=${content.id})}"
+                  th:object="${commentform}">
+                <div class="form-area">
+                    <label>返信内容</label>
+                    <textarea class="tweet-box" th:field="*{content}" maxlength="200"></textarea><br/>
+                    <input type="hidden" th:field="*{reportId}" th:value="${content.id}" id="reportId"/>
+                    <input type="submit" value="送信"/>
+                </div>
+            </form>
+
+            <div class="message-icon" th:each="comment : ${comments}">
+                <div th:if="${comment.reportId == content.id}">
+                    <div class="text">
+                        返信 : <span th:text="${comment.content}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="edit-button">
             <a th:href="@{/edit/{id}(id=${content.id})}">
                 <input type="button" value="編集">
             </a>
         </div>
         <div class="delete-button">
-<!--  th:action="@{/メソッド/{パラメーター}　(パラメーター=${コントローラーのaddObjectに格納されているキー.ビーンズのゲッター})}" -->
+            <!--  th:action="@{/メソッド/{パラメーター}　(パラメーター=${コントローラーのaddObjectに格納されているキー.ビーンズのゲッター})}" -->
             <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
                 <input type="submit" value="削除">
             </form>
