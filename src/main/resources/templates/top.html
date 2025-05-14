@@ -21,18 +21,19 @@
             投稿 : <span th:text="${content.content}"/>
         </div>
         <div class="comment-contents">
-            <form method="post" th:action="@{/comment/{id}(id=${content.id})}"
-                  th:object="${commentform}">
+            <form method="post" th:action="@{/comment/{id}(id=${content.id})}" th:object="${commentform}">
                 <div class="form-area">
                     <label>返信内容</label>
                     <textarea class="tweet-box" th:field="*{content}" maxlength="200"></textarea><br/>
-                    <input type="hidden" th:field="*{reportId}" th:value="${content.id}" id="reportId"/>
                     <input type="submit" value="送信"/>
                 </div>
             </form>
-
             <div class="message-icon" th:each="comment : ${comments}">
                 <div th:if="${comment.reportId == content.id}">
+                    <div>
+                        ID : <span th:text="${content.id}"/>
+                        コメントID : <span th:text="${comment.reportId}"/>
+                    </div>
                     <div class="text">
                         返信 : <span th:text="${comment.content}"></span>
                     </div>

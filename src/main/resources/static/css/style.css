@@ -8,12 +8,12 @@ body {
 	margin-left: 20px;
 	margin-right: 20px;
 	background-color: white;
-	height: 100%;
+	/*height: 100%;*/
 	width: 800px;
 }
 
 .tweet-box {
-	width: 780px;
+	width: 100%;
 	height: 56px;
 }
 
@@ -68,7 +68,8 @@ a.profile .account {
 	margin-right: 5px;
 	margin-bottom: 5px;
 	margin-left: 5px;
-	height: 120px;
+	/*height: 120px;*/
+	/*overflow: scroll;*/
 }
 
 .message-icon .icon {

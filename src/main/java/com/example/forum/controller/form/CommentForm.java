@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-public class CommentForm extends Comment {
+public class CommentForm {
 
     @Id
     private int id; // コメントID
