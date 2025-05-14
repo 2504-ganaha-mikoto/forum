@@ -77,8 +77,7 @@ public class ForumController {
     public ModelAndView editContent(@PathVariable Integer id) {
         ModelAndView mav = new ModelAndView();
         // 編集する投稿を取得
-        // 格納用の空のformを準備
-        // ReportForm reportForm = new ReportForm();
+        // 格納用の空のformを準備　空ではなくすでにコメントが入っている
         ReportForm report = reportService.editReport(id);
         // 編集する投稿をセット　　　（"キー"　　　,"バリュー"）
         mav.addObject("formModel", report);
