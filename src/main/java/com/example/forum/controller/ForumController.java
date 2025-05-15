@@ -116,12 +116,11 @@ public class ForumController {
     /*
      *コメント投稿
      */
-    @PostMapping("/comment/{id}")
-    public ModelAndView addContent(@PathVariable Integer id,
-                                   @ModelAttribute("commentform") CommentForm commentForm){
+    @PostMapping("/comment")
+    public ModelAndView addContent(@ModelAttribute("commentform") CommentForm commentForm){
         //強引にフォームに追加
-        commentForm.setReportId(id);
-        commentForm.setId(0);
+//        commentForm.setReportId(id);
+//        commentForm.setId(0);
         // 返信をテーブルに格納
         commentService.saveComment(commentForm);
         // rootへリダイレクト

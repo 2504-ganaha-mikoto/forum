@@ -21,10 +21,11 @@
             投稿 : <span th:text="${content.content}"/>
         </div>
         <div class="comment-contents">
-            <form method="post" th:action="@{/comment/{id}(id=${content.id})}" th:object="${commentform}">
+            <form method="post" action="/comment" >
                 <div class="form-area">
                     <label>返信内容</label>
-                    <textarea class="tweet-box" th:field="*{content}" maxlength="200"></textarea><br/>
+                    <textarea class="tweet-box"  name ="content" maxlength="200"></textarea><br/>
+                    <input type="hidden" th:value ="${content.id}" name="reportId"/>
                     <input type="submit" value="送信"/>
                 </div>
             </form>
