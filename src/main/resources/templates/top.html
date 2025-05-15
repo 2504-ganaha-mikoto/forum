@@ -32,11 +32,16 @@
             <div class="message-icon" th:each="comment : ${comments}">
                 <div th:if="${comment.reportId == content.id}">
                     <div>
-                        ID : <span th:text="${content.id}"/>
+                        投稿ID : <span th:text="${content.id}"/>
                         コメントID : <span th:text="${comment.reportId}"/>
                     </div>
                     <div class="text">
                         返信 : <span th:text="${comment.content}"></span>
+                    </div>
+                    <div class="edit-button">
+                        <a th:href="@{/editComment/{id}(id=${comment.id})}">
+                            <input type="button" value="返信を編集">
+                        </a>
                     </div>
                 </div>
             </div>

@@ -65,4 +65,14 @@ public class CommentService {
         return comment;
     }
 
+    /*
+     * レコード1件取得
+     */
+    public CommentForm editComment(Integer id) {
+        List<Comment> results = new ArrayList<>();
+        //Id が合致しないときは null を返したいので、.orElse(null)
+        results.add((Comment) commentRepository.findById(id).orElse(null));
+        List<CommentForm> comments = setCommentForm(results);
+        return comments.get(0);
+    }
 }
