@@ -9,4 +9,5 @@ public class ReportForm {
 
     private int id;
     private String content;
+    //startDateなど作る？？
 }

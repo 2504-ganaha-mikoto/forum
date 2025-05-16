@@ -45,7 +45,7 @@ public class CommentService {
         return comments;
     }
     /*
-     * レコード追加　saveメソッドはテーブルに新規投稿をinsertするような処理
+     * レコード追加　saveメソッドはテーブルに新規投稿をinsert・updateするような処理
      */
     public void saveComment(CommentForm reqComment) {
         Comment saveComment = setCommentEntity(reqComment);
@@ -74,5 +74,13 @@ public class CommentService {
         results.add((Comment) commentRepository.findById(id).orElse(null));
         List<CommentForm> comments = setCommentForm(results);
         return comments.get(0);
+    }
+
+    /*
+     * レコード削除
+     */
+    public void deleteComment(Integer id) {
+        commentRepository.deleteById(id);
+        //戻り値はなし
     }
 }

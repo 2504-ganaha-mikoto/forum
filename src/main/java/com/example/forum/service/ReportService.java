@@ -3,10 +3,13 @@ package com.example.forum.service;
 import com.example.forum.controller.form.ReportForm;
 import com.example.forum.repository.ReportRepository;
 import com.example.forum.repository.entity.Report;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,10 +20,38 @@ public class ReportService {
     /*
      * レコード全件取得処理
      */
-    public List<ReportForm> findAllReport() {
+    public List<ReportForm> findAllReport(String start ,String end) {
 //        findAllで実行されている処理はSQL文の「select * from report;」のようなもの
+//        日付をDate型に変換
+//        nullなど期待していない値のときは？
+        String strStartDay = null;
+        String strEndDay = null;
+        if(!StringUtils.isBlank(start)){
+            strStartDay = start + " 00:00:00";
+        } else {
+            strStartDay = "2020/01/01 00:00:00";	//デフォルト値
+        }
+        if (!StringUtils.isBlank(end)) {
+            strEndDay = end + " 23:59:59";
+
+        } else {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            strEndDay = sdf.format(date) + " 23:59:59";		//デフォルト値
+//            Stringにもどす
+        }
+        try {
+//2つともDate型に変換する
+            SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+            Date startDay = sdFormat.parse(strStartDay);
+        } catch () {
+
+        }
+
+
+
         //ennity型
-        List<Report> results = reportRepository.findAllByOrderByIdDesc();
+        List<Report> results = reportRepository.findByCreatedDateBetweenOrderByIdDesc(Date  ,Date );
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
         List<ReportForm> reports = setReportForm(results);

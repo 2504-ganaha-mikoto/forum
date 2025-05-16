@@ -23,7 +23,10 @@ public class ForumController {
      * 投稿内容表示処理
      */
     @GetMapping
-    public ModelAndView top() {
+    public ModelAndView top(@RequestParam(name="start", required=false) String start,
+                            @RequestParam(name="end", required=false) String end) {
+        //日付を受け取る処理？
+
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
         List<ReportForm> contentData = reportService.findAllReport();
@@ -99,7 +102,7 @@ public class ForumController {
     /*
      * 編集処理
      */
-    @PutMapping("/updateReport/{id}")
+    @PutMapping("/update/{id}")
     //@PathVariable はInteger型で アクションthに指定されている｛id}を取り出すことができる
     //@ModelAttributeは("formModel")のキーで登録しているフォームを受け取ることができる
     public ModelAndView updateContent (@PathVariable Integer id,
@@ -142,7 +145,7 @@ public class ForumController {
         // 編集する投稿をセット　　　（"キー"　　　,"バリュー"）
         mav.addObject("formModel", comment);
         // 画面遷移先を指定
-        mav.setViewName("/edit");
+        mav.setViewName("/editComment");
         return mav;
     }
 
@@ -152,12 +155,22 @@ public class ForumController {
     @PutMapping("/updateComment/{id}")
     //@PathVariable はInteger型で アクションthに指定されている｛id}を取り出すことができる
     //@ModelAttributeは("formModel")のキーで登録しているフォームを受け取ることができる
-    public ModelAndView updateComment (@PathVariable Integer id,
-                                       @ModelAttribute CommentForm comment) {
+    public ModelAndView updateComment (@ModelAttribute CommentForm comment) {
 //        comment.setId(id);
         // 編集した投稿を更新
         // 投稿の更新処理を行います。
         commentService.saveComment(comment);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
+    }
+
+    /*
+     *コメント削除処理
+     */
+    @DeleteMapping("/deleteComment/{id}")
+    public ModelAndView deleteComment(@PathVariable Integer id) {
+        // 投稿をテーブルに格納
+        commentService.deleteComment(id);
         // rootへリダイレクト
         return new ModelAndView("redirect:/");
     }
