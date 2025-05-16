@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Controller
@@ -24,12 +25,12 @@ public class ForumController {
      */
     @GetMapping
     public ModelAndView top(@RequestParam(name="start", required=false) String start,
-                            @RequestParam(name="end", required=false) String end) {
+                            @RequestParam(name="end", required=false) String end) throws ParseException {
         //日付を受け取る処理？
 
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
-        List<ReportForm> contentData = reportService.findAllReport();
+        List<ReportForm> contentData = reportService.findAllReport(start ,end);
         List<CommentForm> commentData = commentService.findAllComment();
 
         // 画面遷移先を指定 「現在のURL」/top へ画面遷移することを指定します。

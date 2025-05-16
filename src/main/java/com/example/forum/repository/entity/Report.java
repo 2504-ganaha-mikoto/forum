@@ -10,9 +10,6 @@ import java.util.Date;
 @Table(name = "report")
 @Getter
 @Setter
-@NamedQuery(name = "between", query = "select u from Report u between ? and ?2")
-
-
 public class Report {
     @Id
     @Column
