@@ -21,7 +21,7 @@ public class CommentService {
     public List<CommentForm> findAllComment() {
 //        findAllで実行されている処理はSQL文の「select * from report;」のようなもの
         //ennity型
-        List<Comment> results = commentRepository.findAllByOrderByIdDesc();
+        List<Comment> results = commentRepository.findAllByOrderByUpdatedDateDesc();
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
         List<CommentForm> comments = setCommentForm(results);

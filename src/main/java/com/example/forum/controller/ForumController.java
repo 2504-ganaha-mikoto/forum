@@ -40,6 +40,9 @@ public class ForumController {
         mav.addObject("contents", contentData);
         mav.addObject("comments", commentData);
         mav.addObject("commentform", new CommentForm());
+        mav.addObject("start",start);
+        mav.addObject("end", end);
+
 
         /* 変数mavを戻り値として返します。 */
         return mav;
@@ -122,16 +125,10 @@ public class ForumController {
      */
     @PostMapping("/comment")
     public ModelAndView addContent(@ModelAttribute("commentform") CommentForm commentForm){
-        //強引にフォームに追加
-//        commentForm.setReportId(id);
-//        commentForm.setId(0);
         // 返信をテーブルに格納
         commentService.saveComment(commentForm);
         // rootへリダイレクト
         return new ModelAndView("redirect:/");
-//        どうして新しく作って送りなおしているのか
-//        return "redirect:/";
-
     }
 
     /*

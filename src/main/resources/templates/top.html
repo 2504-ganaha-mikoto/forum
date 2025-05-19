@@ -11,7 +11,8 @@
 </div>
 <div class="form-area">
     <form action="./" method="get">
-        日付：<input type="date" name="start" value="${start}">～<input type="date" name="end" value = "${end}">
+<!--        日付の値の保持-->
+        日付：<input type="date" name="start" th:value="${start}" >～<input type="date" name="end" th:value = "${end}">
         <input type="submit" value="絞込">
     </form>
 </div>

@@ -12,5 +12,5 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 //    こちらで特に何か記載する必要はありません。
 //    JpaRepository にはCRUD操作の為の基本的なメソッドが定義されており、SQL文を打つ必要がありません
 //    カスタムクエリ
-    public List<Comment> findAllByOrderByIdDesc();
+    public List<Comment> findAllByOrderByUpdatedDateDesc();
 }

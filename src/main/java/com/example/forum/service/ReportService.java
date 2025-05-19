@@ -38,7 +38,6 @@ public class ReportService {
             Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             strEndDay = sdf.format(date) + " 23:59:59";		//デフォルト値
-            // Stringにもどす
         }
             //2つともDate型に変換する
             SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -46,10 +45,9 @@ public class ReportService {
             Date endDay = sdFormat.parse(strEndDay);
 
 
-
-
         //ennity型
-        List<Report> results = reportRepository.findByCreatedDateBetweenOrderByIdDesc(startDay ,endDay );
+//        ・コメントを追加すると投稿の更新日時が更新される　@PostMapping("/comment")でレポートも更新する処理をする
+        List<Report> results = reportRepository.findByUpdatedDateBetweenOrderByIdDesc(startDay ,endDay );
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
         List<ReportForm> reports = setReportForm(results);
