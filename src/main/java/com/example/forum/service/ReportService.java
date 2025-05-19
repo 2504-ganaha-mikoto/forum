@@ -46,8 +46,7 @@ public class ReportService {
 
 
         //ennity型
-//        ・コメントを追加すると投稿の更新日時が更新される　@PostMapping("/comment")でレポートも更新する処理をする
-        List<Report> results = reportRepository.findByUpdatedDateBetweenOrderByIdDesc(startDay ,endDay );
+        List<Report> results = reportRepository.findByUpdatedDateBetweenOrderByUpdatedDateDesc(startDay ,endDay );
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
         List<ReportForm> reports = setReportForm(results);
@@ -58,7 +57,6 @@ public class ReportService {
      */
     private List<ReportForm> setReportForm(List<Report> results) {
 //        ビューに返すためにはフォームに移し返さないといけない
-//        コントローラーは全部フォームで流してる？？
         List<ReportForm> reports = new ArrayList<>();
 
         for (int i = 0; i < results.size(); i++) {
@@ -70,16 +68,16 @@ public class ReportService {
         }
         return reports;
     }
+
     /*
-     * レコード追加　saveメソッドはテーブルに新規投稿をinsertするような処理
+     * 投稿追加aveメソッドはテーブルに新規投稿をinsertするような処理
      */
-    public void saveReport(ReportForm reqReport) {
+    public void saveReport(ReportForm reqReport) throws ParseException {
         Report saveReport = setReportEntity(reqReport);
         //saveメソッドはテーブルに新規投稿をinsert・updateするような処理
         reportRepository.save(saveReport);
         //戻り値はなし
     }
-
     /*
      * レコード削除
      */
@@ -103,13 +101,18 @@ public class ReportService {
     /*
      * リクエストから取得した情報をEntityに設定
      */
-    private Report setReportEntity(ReportForm reqReport) {
+    private Report setReportEntity(ReportForm reqReport) throws ParseException {
         Report report = new Report();
         report.setId(reqReport.getId());
         report.setContent(reqReport.getContent());
+        report.setCreatedDate(reqReport.getCreatedDate());
+        Date date = new Date();
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String update = sdFormat.format(date);
+        Date updateDate = sdFormat.parse(update);
+        report.setUpdatedDate(reqReport.getUpdatedDate());
         return report;
     }
-
 
 }
 
