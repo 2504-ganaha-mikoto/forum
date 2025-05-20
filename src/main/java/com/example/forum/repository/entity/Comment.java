@@ -20,9 +20,13 @@ public class Comment {
     @Column
     private int reportId; // 元投稿（Content）のID
     @Column
-    private String commentContent; // 返信内容
+    private String Content; // 返信内容
     @CreationTimestamp
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+    @CreationTimestamp
+    @Column(name = "created_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
 }

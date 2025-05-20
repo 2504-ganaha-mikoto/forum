@@ -64,6 +64,7 @@ public class ReportService {
             Report result = results.get(i);
             report.setId(result.getId());
             report.setContent(result.getContent());
+            report.setUpdatedDate(result.getUpdatedDate());
             reports.add(report);
         }
         return reports;
@@ -105,12 +106,15 @@ public class ReportService {
         Report report = new Report();
         report.setId(reqReport.getId());
         report.setContent(reqReport.getContent());
-        report.setCreatedDate(reqReport.getCreatedDate());
-        Date date = new Date();
+
+        //現在日時を取得
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String update = sdFormat.format(date);
-        Date updateDate = sdFormat.parse(update);
-        report.setUpdatedDate(reqReport.getUpdatedDate());
+        Date updateDate = new Date();
+        String update = sdFormat.format(updateDate);
+        Date updatedDate = sdFormat.parse(update);
+        //entityにセット
+        report.setUpdatedDate(updatedDate);
+
         return report;
     }
 

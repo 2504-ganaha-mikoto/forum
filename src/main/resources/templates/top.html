@@ -31,11 +31,15 @@
         <div class="comment-contents">
             <form method="post" action="/comment" >
                 <div class="form-area">
+<!--                    <div th:object="${commentform}" >-->
+<!--                        <div class="message-icon" th:if="${#fields.hasErrors('commentContent')}" style="color: red" th:errors="*{commentContent}">-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <label>返信内容</label>
                     <textarea class="tweet-box"  name ="commentContent" maxlength="200"></textarea><br/>
                     <input type="hidden" th:value ="${content.id}" name="reportId"/>
                     <input type="hidden" th:value ="${content.content}" name="content"/>
-                    <input type="hidden" th:value ="${content.createdDate}" name="createdDate"/>
+                    <input type="hidden" th:value ="${content.id}" name="id"/>
                     <input type="submit" value="送信"/>
                 </div>
             </form>
@@ -43,13 +47,12 @@
                 <div th:if="${comment.reportId == content.id}">
                     <div>
                         投稿ID : <span th:text="${content.id}"/>
-                        コメントID : <span th:text="${comment.reportId}"/>
                     </div>
                     <div class="text">
-                        返信 : <span th:text="${comment.content}"></span>
+                        返信 : <span th:text="${comment.commentContent}"></span>
                     </div>
                     <div class="edit-button">
-                        <a th:href="@{/editComment/{id}(id=${comment.id})}">
+                        <a th:href="@{/editComment/{id}(id=${comment.commentId})}">
                             <input type="button" value="返信を編集">
                         </a>
                     </div>

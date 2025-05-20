@@ -37,9 +37,9 @@ public class CommentService {
         for (int i = 0; i < results.size(); i++) {
             CommentForm comment = new CommentForm();
             Comment result = results.get(i);
-            comment.setId(result.getId());
+            comment.setCommentId(result.getId());
             comment.setReportId(result.getReportId());
-            comment.setContent(result.getContent());
+            comment.setCommentContent(result.getContent());
             comments.add(comment);
         }
         return comments;
@@ -59,9 +59,9 @@ public class CommentService {
      */
     private Comment setCommentEntity(CommentForm reqComment) {
         Comment comment = new Comment();
-        comment.setId(reqComment.getId());
+        comment.setId(reqComment.getCommentId());
         comment.setReportId(reqComment.getReportId());
-        comment.setContent(reqComment.getContent());
+        comment.setContent(reqComment.getCommentContent());
         return comment;
     }
 

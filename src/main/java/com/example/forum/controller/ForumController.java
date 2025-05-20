@@ -6,6 +6,8 @@ import com.example.forum.service.CommentService;
 import com.example.forum.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -70,7 +72,16 @@ public class ForumController {
      * 新規投稿処理
      */
     @PostMapping("/add")
-    public ModelAndView addContent(@ModelAttribute("formModel") ReportForm reportForm) throws ParseException {
+    public ModelAndView addContent(@Validated @ModelAttribute("formModel") ReportForm reportForm, BindingResult result)
+                                    throws ParseException {
+        if(result.hasErrors()) {
+            ModelAndView mav = new ModelAndView();
+//            新規投稿の画面に戻る
+            mav.setViewName("/new");
+//            引数のレポートをそのまま戻す
+            mav.addObject("formModel", reportForm);
+            return mav;
+        }
         // 投稿をテーブルに格納
         reportService.saveReport(reportForm);
         // rootへリダイレクト
@@ -113,21 +124,41 @@ public class ForumController {
     //@PathVariable はInteger型で アクションthに指定されている｛id}を取り出すことができる
     //@ModelAttributeは("formModel")のキーで登録しているフォームを受け取ることができる
     public ModelAndView updateContent (@PathVariable Integer id,
-                                       @ModelAttribute ReportForm report) throws ParseException {
-        // UrlParameterのidを更新するentityにセット
-        report.setId(id);
-        // 編集した投稿を更新
-        //「report.setId(id);」で、指定された id をセットして、saveReport メソッドへ行って、
-        // 投稿の更新処理を行います。
-        reportService.saveReport(report);
-        // rootへリダイレクト
-        return new ModelAndView("redirect:/");
+                                       @Validated @ModelAttribute("formModel") ReportForm report, BindingResult result) throws ParseException {
+
+        if(result.hasErrors()) {
+            ModelAndView mav = new ModelAndView();
+//            新規投稿の画面に戻る
+            mav.setViewName("/edit");
+//            引数のレポートをそのまま戻す
+            mav.addObject("formModel", report);
+            return mav;
+        }
+            // UrlParameterのidを更新するentityにセット
+            report.setId(id);
+            // 編集した投稿を更新
+            //「report.setId(id);」で、指定された id をセットして、saveReport メソッドへ行って、
+            // 投稿の更新処理を行います。
+            reportService.saveReport(report);
+            // rootへリダイレクト
+            return new ModelAndView("redirect:/");
+
     }
     /*
      *コメント投稿
      */
     @PostMapping("/comment")
-    public ModelAndView addContent(@ModelAttribute("formModel") CommentForm commentForm,ReportForm report) throws ParseException {
+    public ModelAndView addContent(@Validated @ModelAttribute("formModel") CommentForm commentForm,ReportForm report,
+                                   BindingResult result) throws ParseException {
+        if(result.hasErrors()) {
+            ModelAndView mav = new ModelAndView();
+//            投稿の画面に戻る
+            mav.setViewName("/");
+//            引数のレポートをそのまま戻す
+            mav.addObject("formModel", commentForm);
+            mav.addObject("formModel", report);
+            return mav;
+        }
         // 返信をテーブルに格納
         commentService.saveComment(commentForm);
 //        レポートIDに対応した投稿を取得//
@@ -158,9 +189,16 @@ public class ForumController {
     @PutMapping("/updateComment/{id}")
     //@PathVariable はInteger型で アクションthに指定されている｛id}を取り出すことができる
     //@ModelAttributeは("formModel")のキーで登録しているフォームを受け取ることができる
-    public ModelAndView updateComment (@ModelAttribute CommentForm comment) throws ParseException {
-//        comment.setId(id);
-        // 編集した投稿を更新
+    public ModelAndView updateComment (@Validated @ModelAttribute("formModel") CommentForm comment,
+                                       BindingResult result) throws ParseException {
+        if(result.hasErrors()) {
+            ModelAndView mav = new ModelAndView();
+//            新規投稿の画面に戻る
+            mav.setViewName("/editComment");
+//            引数のレポートをそのまま戻す
+            mav.addObject("formModel", comment);
+            return mav;
+        }        // 編集した投稿を更新
         // 投稿の更新処理を行います。
         commentService.saveComment(comment);
         ReportForm report = reportService.editReport(comment.getReportId());

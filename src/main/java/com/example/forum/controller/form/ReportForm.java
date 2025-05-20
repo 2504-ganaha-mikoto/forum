@@ -2,6 +2,7 @@ package com.example.forum.controller.form;
 
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,11 +14,9 @@ import java.util.Date;
 public class ReportForm {
 
     private int id;
+    @NotBlank(message = "投稿内容を入力してください")
     private String content;
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
+//    @CreationTimestamp
+//@Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
 }

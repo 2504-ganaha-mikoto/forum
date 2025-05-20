@@ -21,14 +21,9 @@ public class Report {
     @Column
     private String content;
 
-    @CreationTimestamp
+//    @CreationTimestamp
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-
-    @CreationTimestamp
-    @Column(name = "created_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
 }
 

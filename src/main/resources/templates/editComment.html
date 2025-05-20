@@ -10,16 +10,21 @@
   <h2>返信を編集</h2>
 </div>
 <div class="main-contents">
-  <form th:method="put" th:action="@{/updateComment/{id}(id=${formModel.id})}" th:object="${formModel}" >
+  <form th:method="put" th:action="@{/updateComment/{id}(id=${formModel.commentId})}" th:object="${formModel}" >
+    <div th:object="${formModel}" >
+      <div class="message-icon" th:if="${#fields.hasErrors('commentContent')}" style="color: red" th:errors="*{commentContent}">
+        投稿内容を入力してください
+      </div>
+    </div>
     <div class="form-area">
       <label>返信内容</label>
-      <textarea class="tweet-box" name="content" th:field="*{content}" size="20" maxlength="200" /></textarea><br/>
+      <textarea class="tweet-box" name="content" th:field="*{commentContent}" size="20" maxlength="200" /></textarea><br/>
       <input type="hidden" th:value ="${formModel.reportId}" name="reportId"/>
       <input type="submit" value="更新"/>
     </div>
   </form>
   <div class="delete-button">
-    <form th:action="@{/deleteComment/{id}(id=${formModel.id})}" th:method="delete">
+    <form th:action="@{/deleteComment/{id}(id=${formModel.commentId})}" th:method="delete">
       <input type="submit" value="削除">
     </form>
   </div>
