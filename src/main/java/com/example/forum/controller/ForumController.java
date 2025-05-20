@@ -148,15 +148,36 @@ public class ForumController {
      *コメント投稿
      */
     @PostMapping("/comment")
-    public ModelAndView addContent(@Validated @ModelAttribute("formModel") CommentForm commentForm,ReportForm report,
-                                   BindingResult result) throws ParseException {
+    public ModelAndView addContent(@Validated @ModelAttribute("commentform") CommentForm commentForm,BindingResult result ,ReportForm report
+                                   ) throws ParseException {
         if(result.hasErrors()) {
+//            ModelAndView mav = new ModelAndView();
+////            投稿の画面に戻る
+//            mav.setViewName("redirect:/");
+////            引数のレポートをそのまま戻す
+//            mav.addObject("commentform", report);
+//            mav.addObject("commentform", commentForm);
+//            return mav;
+
+//            top(null,null);
+
             ModelAndView mav = new ModelAndView();
-//            投稿の画面に戻る
-            mav.setViewName("/");
-//            引数のレポートをそのまま戻す
-            mav.addObject("formModel", commentForm);
-            mav.addObject("formModel", report);
+            // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
+            List<ReportForm> contentData = reportService.findAllReport(null ,null);
+            List<CommentForm> commentData = commentService.findAllComment();
+
+            // 画面遷移先を指定 「現在のURL」/top へ画面遷移することを指定します。
+            mav.setViewName("/top");
+            // 投稿データオブジェクトを先ほどのcontentDataをModelAndView型の変数mavへ格納します。
+            // 保管各値がReportForm型のリストである「contentData」へ格納されます。
+            mav.addObject("contents", contentData);
+            mav.addObject("comments", commentData);
+            mav.addObject("commentform", new CommentForm());
+            mav.addObject("start",null);
+            mav.addObject("end", null);
+
+
+            /* 変数mavを戻り値として返します。 */
             return mav;
         }
         // 返信をテーブルに格納

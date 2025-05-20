@@ -14,7 +14,7 @@ import java.util.Date;
 public class ReportForm {
 
     private int id;
-    @NotBlank(message = "投稿内容を入力してください")
+    @NotBlank
     private String content;
 //    @CreationTimestamp
 //@Temporal(TemporalType.TIMESTAMP)
