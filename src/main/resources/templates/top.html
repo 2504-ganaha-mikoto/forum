@@ -18,9 +18,11 @@
 </div>
 
 <div class="main-contents">
+    <div class="message-icon">
     <a href="/new">
         <button class="new-button" type="button">新規投稿</button>
     </a>
+    </div>
     <div class="message-icon" th:each="content : ${contents}">
         <div>
             ID : <span th:text="${content.id}"/>
@@ -32,15 +34,14 @@
             <form method="post" action="/comment">
                 <div class="form-area">
                     <div class="message-icon" th:each="error : ${errorMessage}">
-<!--                        <div class="message-icon" th:if="${#fields.hasErrors('commentContent')}" style="color: red">-->
-                    <div th:if="${error.reportId == content.id}">
-                    <div class="message-icon" th:each="message : ${errorMessage}" style="color: red">
-                            <div th:text="${message.errorMessage}">
+                        <!--                        <div class="message-icon" th:if="${#fields.hasErrors('commentContent')}" style="color: red">-->
+                        <div th:if="${error.reportId == content.id}">
+                            <div class="message-icon" th:each="message : ${errorMessage}" style="color: red">
+                                <div th:text="${message.errorMessage}">
+                                </div>
                             </div>
-                    </div>
                         </div>
                     </div>
-<!--                    </div>-->
                     <label>返信内容</label>
                     <textarea class="tweet-box" name="commentContent" maxlength="200"></textarea><br/>
                     <input type="hidden" th:value="${content.id}" name="reportId"/>
@@ -49,8 +50,7 @@
                     <input type="submit" value="送信"/>
                 </div>
             </form>
-            <div class="message-icon" th:each="comment : ${comments}">
-                <div th:if="${comment.reportId == content.id}">
+            <div class="message-icon" th:each="comment : ${comments}" th:if="${comment.reportId == content.id}">
                     <div>
                         投稿ID : <span th:text="${content.id}"/>
                     </div>
@@ -62,7 +62,6 @@
                             <input type="button" value="返信を編集">
                         </a>
                     </div>
-                </div>
             </div>
         </div>
         <div class="edit-button">

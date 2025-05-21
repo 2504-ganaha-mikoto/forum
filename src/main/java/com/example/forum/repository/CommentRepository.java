@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-    //    ReportRepository が JpaRepository を継承しており、findAllメソッドを実行しているため、
+//    ReportRepository が JpaRepository を継承しており、findAllメソッドを実行しているため、
 //    こちらで特に何か記載する必要はありません。
 //    JpaRepository にはCRUD操作の為の基本的なメソッドが定義されており、SQL文を打つ必要がありません
 //    カスタムクエリ

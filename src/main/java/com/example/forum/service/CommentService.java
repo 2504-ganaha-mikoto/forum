@@ -6,7 +6,10 @@ import com.example.forum.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,6 +43,8 @@ public class CommentService {
             comment.setCommentId(result.getId());
             comment.setReportId(result.getReportId());
             comment.setCommentContent(result.getContent());
+            comment.setCreatedDate(String.valueOf(result.getCreatedDate()));
+            comment.setUpdatedDate(String.valueOf(result.getUpdatedDate()));
             comments.add(comment);
         }
         return comments;
@@ -47,7 +52,7 @@ public class CommentService {
     /*
      * レコード追加　saveメソッドはテーブルに新規投稿をinsert・updateするような処理
      */
-    public void saveComment(CommentForm reqComment) {
+    public void saveComment(CommentForm reqComment) throws ParseException {
         Comment saveComment = setCommentEntity(reqComment);
         //saveメソッドはテーブルに新規投稿をinsert・updateするような処理
         commentRepository.save(saveComment);
@@ -57,11 +62,20 @@ public class CommentService {
     /*
      * リクエストから取得した情報をEntityに設定
      */
-    private Comment setCommentEntity(CommentForm reqComment) {
+    private Comment setCommentEntity(CommentForm reqComment) throws ParseException {
         Comment comment = new Comment();
         comment.setId(reqComment.getCommentId());
         comment.setReportId(reqComment.getReportId());
         comment.setContent(reqComment.getCommentContent());
+
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date Createdate = sdFormat.parse(reqComment.getCreatedDate());
+        comment.setCreatedDate(Createdate);
+
+        Date updateDate = new Date();
+        String update = sdFormat.format(updateDate);
+        Date updatedDate = sdFormat.parse(update);
+        comment.setUpdatedDate(updatedDate);
         return comment;
     }
 

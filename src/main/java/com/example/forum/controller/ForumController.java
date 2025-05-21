@@ -200,7 +200,8 @@ public class ForumController {
     @PutMapping("/updateComment/{id}")
     //@PathVariable はInteger型で アクションthに指定されている｛id}を取り出すことができる
     //@ModelAttributeは("formModel")のキーで登録しているフォームを受け取ることができる
-    public ModelAndView updateComment (@Validated @ModelAttribute("formModel") CommentForm comment,
+    public ModelAndView updateComment (@PathVariable Integer id,
+            @Validated @ModelAttribute("formModel") CommentForm comment,
                                        BindingResult result) throws ParseException {
         if(result.hasErrors()) {
             ModelAndView mav = new ModelAndView();
@@ -211,6 +212,7 @@ public class ForumController {
             return mav;
         }        // 編集した投稿を更新
         // 投稿の更新処理を行います。
+        comment.setCommentId(id);
         commentService.saveComment(comment);
         ReportForm report = reportService.editReport(comment.getReportId());
 //        レポートを更新

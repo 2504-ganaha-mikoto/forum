@@ -13,13 +13,15 @@
   <form th:method="put" th:action="@{/updateComment/{id}(id=${formModel.commentId})}" th:object="${formModel}" >
     <div th:object="${formModel}" >
       <div class="message-icon" th:if="${#fields.hasErrors('commentContent')}" style="color: red" th:errors="*{commentContent}">
-        投稿内容を入力してください
+        返信内容を入力してください
       </div>
     </div>
     <div class="form-area">
       <label>返信内容</label>
       <textarea class="tweet-box" name="content" th:field="*{commentContent}" size="20" maxlength="200" /></textarea><br/>
       <input type="hidden" th:value ="${formModel.reportId}" name="reportId"/>
+      <input type="hidden" th:value ="${formModel.createdDate}" name="createdDate"/>
+      <input type="hidden" th:value ="${formModel.updatedDate}" name="updatedDate"/>
       <input type="submit" value="更新"/>
     </div>
   </form>

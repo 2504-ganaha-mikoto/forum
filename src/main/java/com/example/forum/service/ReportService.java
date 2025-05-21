@@ -21,15 +21,15 @@ public class ReportService {
     /*
      * レコード全件取得処理
      */
-    public List<ReportForm> findAllReport(String start ,String end) throws ParseException {
+    public List<ReportForm> findAllReport(String start, String end) throws ParseException {
 //        findAllで実行されている処理はSQL文の「select * from report;」のようなもの
 //        日付をDate型に変換
         String strStartDay;
         String strEndDay;
-        if(!StringUtils.isBlank(start)){
+        if (!StringUtils.isBlank(start)) {
             strStartDay = start + " 00:00:00";
         } else {
-            strStartDay = "2020-01-01 00:00:00";	//デフォルト値
+            strStartDay = "2020-01-01 00:00:00";    //デフォルト値
         }
         if (!StringUtils.isBlank(end)) {
             strEndDay = end + " 23:59:59";
@@ -37,21 +37,22 @@ public class ReportService {
         } else {
             Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            strEndDay = sdf.format(date) + " 23:59:59";		//デフォルト値
+            strEndDay = sdf.format(date) + " 23:59:59";        //デフォルト値
         }
-            //2つともDate型に変換する
-            SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date startDay = sdFormat.parse(strStartDay);
-            Date endDay = sdFormat.parse(strEndDay);
+        //2つともDate型に変換する
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date startDay = sdFormat.parse(strStartDay);
+        Date endDay = sdFormat.parse(strEndDay);
 
 
         //ennity型
-        List<Report> results = reportRepository.findByUpdatedDateBetweenOrderByUpdatedDateDesc(startDay ,endDay );
+        List<Report> results = reportRepository.findByUpdatedDateBetweenOrderByUpdatedDateDesc(startDay, endDay);
 //        setReportFormメソッドでEntity→Formに詰め直して、Controllerに戻しています。
 //        これはEntityはデータアクセス時の入れ物、FormはViewへの入出力時に使用する入れ物と役割を分けているためです
         List<ReportForm> reports = setReportForm(results);
         return reports;
     }
+
     /*
      * DBから取得したデータをFormに設定
      */
@@ -79,6 +80,7 @@ public class ReportService {
         reportRepository.save(saveReport);
         //戻り値はなし
     }
+
     /*
      * レコード削除
      */
@@ -94,11 +96,11 @@ public class ReportService {
         List<Report> results = new ArrayList<>();
         //reportRepository.findById(id) : Id が一致するレコードを取得する
         //Id が合致しないときは null を返したいので、.orElse(null)
-//        return reportRepository.findById(id).orElseThrow(() -> new NotFoundException("不正なパラメーターです"));
         results.add((Report) reportRepository.findById(id).orElse(null));
         List<ReportForm> reports = setReportForm(results);
         return reports.get(0);
     }
+
     /*
      * リクエストから取得した情報をEntityに設定
      */
