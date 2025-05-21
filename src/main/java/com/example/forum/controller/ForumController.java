@@ -1,12 +1,15 @@
 package com.example.forum.controller;
 
 import com.example.forum.controller.form.CommentForm;
+import com.example.forum.controller.form.ErrorMessageForm;
 import com.example.forum.controller.form.ReportForm;
 import com.example.forum.service.CommentService;
 import com.example.forum.service.ReportService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +29,8 @@ public class ForumController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    HttpSession session;
     /*
      * 投稿内容表示処理
      */
@@ -32,7 +38,9 @@ public class ForumController {
     public ModelAndView top(@RequestParam(name="start", required=false) String start,
                             @RequestParam(name="end", required=false) String end) throws ParseException {
         //日付を受け取る処理？
-
+        ErrorMessageForm errorMessage = (ErrorMessageForm) session.getAttribute("errorMessage");  // 取得
+//        CommentForm commentForm = (CommentForm) session.getAttribute("commentForm");
+        session.invalidate(); // クリア
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
         List<ReportForm> contentData = reportService.findAllReport(start ,end);
@@ -45,6 +53,7 @@ public class ForumController {
         mav.addObject("contents", contentData);
         mav.addObject("comments", commentData);
         mav.addObject("commentform", new CommentForm());
+        mav.addObject("errorMessage", errorMessage);
         mav.addObject("start",start);
         mav.addObject("end", end);
 
@@ -151,33 +160,14 @@ public class ForumController {
     public ModelAndView addContent(@Validated @ModelAttribute("commentform") CommentForm commentForm,BindingResult result ,ReportForm report
                                    ) throws ParseException {
         if(result.hasErrors()) {
-//            ModelAndView mav = new ModelAndView();
-////            投稿の画面に戻る
-//            mav.setViewName("redirect:/");
-////            引数のレポートをそのまま戻す
-//            mav.addObject("commentform", report);
-//            mav.addObject("commentform", commentForm);
-//            return mav;
-
-//            top(null,null);
-
             ModelAndView mav = new ModelAndView();
-            // 投稿を全件取得した値を入れる箱（contentData）をつくってサービスに渡しています
-            List<ReportForm> contentData = reportService.findAllReport(null ,null);
-            List<CommentForm> commentData = commentService.findAllComment();
-
-            // 画面遷移先を指定 「現在のURL」/top へ画面遷移することを指定します。
-            mav.setViewName("/top");
-            // 投稿データオブジェクトを先ほどのcontentDataをModelAndView型の変数mavへ格納します。
-            // 保管各値がReportForm型のリストである「contentData」へ格納されます。
-            mav.addObject("contents", contentData);
-            mav.addObject("comments", commentData);
-            mav.addObject("commentform", new CommentForm());
-            mav.addObject("start",null);
-            mav.addObject("end", null);
-
-
-            /* 変数mavを戻り値として返します。 */
+            mav.setViewName("redirect:/");
+            ErrorMessageForm errorMessage = new ErrorMessageForm();
+            errorMessage.setReportId(commentForm.getReportId());
+            for (ObjectError error : result.getAllErrors()) {
+                errorMessage.setErrorMessage(error.getDefaultMessage());
+            }
+            session.setAttribute("errorMessage", errorMessage);
             return mav;
         }
         // 返信をテーブルに格納
